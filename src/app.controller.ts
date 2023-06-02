@@ -3,7 +3,7 @@
  * @Description: 
  * @Author: 
  * @Date: 2023-05-26 15:00:09
- * @LastEditTime: 2023-05-31 17:39:15
+ * @LastEditTime: 2023-06-02 14:03:17
  * @LastEditors: Please set LastEditors
  * @Reference: 
  */
@@ -25,20 +25,20 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-  @Get('user')
-  async getUserInfo() {
-    const res = await this.DB.find()
-    return {
-      code: 200,
-      data: res
-    }
-  }
-  @Get('article')
-  async getArticleInfo() {
-    const res = await this.ArtDB.find()
-    return {
-      code: 200,
-      data: res
-    }
-  }
+  // @Get('user')
+  // async getUserInfo() {
+  //   const res = await this.DB.find()
+  //   return {
+  //     code: 200,
+  //     data: res
+  //   }
+  // }
+  // @Get('article')
+  // async getArticleInfo() {
+  //   const res = await this.ArtDB.find()
+  //   return {
+  //     code: 200,
+  //     data: res
+  //   }
+  // }
 }
