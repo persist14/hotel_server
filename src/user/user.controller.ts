@@ -8,27 +8,33 @@
  * @Reference: 
  */
 
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Query, Get, UseGuards , Req} from '@nestjs/common';
 import { UserService } from './user.service';
-import JWT from 'jsonwebtoken-esm'
+import { JwtService } from '@nestjs/jwt'
+import { JWTKEY } from 'src/logical/auth/constans';
+import { AuthGuard } from 'src/guard/auth.guard';
 @Controller()
 export class UserController {
-    constructor(private readonly UserService: UserService) { }
+    constructor(
+        private readonly UserService: UserService,
+        private readonly jwtService: JwtService
+        ) { }
     @Post('login')
     async login(@Body() body) {
         const res = await this.UserService.login(body.username, body.password)
         let rsdata
         if (res.data) {
+            const payload = { username: res.data.username, id: res.data._id }
             // 生成token
-            const token = JWT.sign(res.data.username, 'Pmer@163.com', {
-                expiresIn: '7d'
-            })
+            const token = await this.jwtService.signAsync(payload, { expiresIn: '30d' })
+            console.log(await this.jwtService.verifyAsync(token, { secret: JWTKEY.secret }));
+            
             rsdata = {
                 data: res.data,
                 code: 200,
                 msg: '登录成功',
-                token: 'berear ' + token,
-                success: true
+                success: true,
+                access_token: `Bearer ${token}`
             }
         } else {
             rsdata = {
@@ -52,6 +58,20 @@ export class UserController {
             code: 200,
             success: reg,
             msg: '注册成功'
+        }
+    }
+
+    @UseGuards(AuthGuard)
+    @Get('profile')
+    async profile(@Query() param: Record<string, any>, @Req() request: Request) {
+        console.log(request['user']);
+        
+        const rdata = await this.UserService.profile(param.id)
+        return {
+            code: 200,
+            msg: '',
+            success: true,
+            data: rdata
         }
     }
 }

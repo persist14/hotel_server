@@ -33,7 +33,6 @@ export class UserService {
             password
         }, {
             __v: 0,
-            _id: 0
         })
         let result
         if (res) {
@@ -64,5 +63,9 @@ export class UserService {
                 msg: false
             }
         }
+    }
+    async profile(id): Promise<any> {
+        const rdata = await this.UserDB.findOne({ _id: id })
+        return rdata
     }
 }

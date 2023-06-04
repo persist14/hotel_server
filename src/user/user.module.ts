@@ -7,11 +7,22 @@
  * @LastEditors: 
  * @Reference: 
  */
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
+import { JwtModule } from '@nestjs/jwt'
+import { JWTKEY } from 'src/logical/auth/constans';
 
+// jwt配置
+const JwtRegister: DynamicModule = JwtModule.register({
+  global: true,
+  secret: JWTKEY.secret,
+  signOptions: { expiresIn: '30d' }
+})
 @Module({
+  imports: [
+    JwtRegister
+  ],
   providers: [UserService],
   controllers: [UserController],
 })
