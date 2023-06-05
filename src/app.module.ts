@@ -12,12 +12,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DbModule } from '../libs/db/src/index'
 import { UserModule } from './user/user.module';
-import { AuthModule } from './logical/auth/auth.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
     DbModule,
-    UserModule
+    UserModule,
+    EmailModule
   ],
   controllers: [AppController],
   providers: [AppService],

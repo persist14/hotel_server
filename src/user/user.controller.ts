@@ -8,16 +8,18 @@
  * @Reference: 
  */
 
-import { Body, Controller, Post, Query, Get, UseGuards , Req} from '@nestjs/common';
+import { Body, Controller, Post, Query, Get, UseGuards , Req, Inject} from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtService } from '@nestjs/jwt'
 import { JWTKEY } from 'src/logical/auth/constans';
 import { AuthGuard } from 'src/guard/auth.guard';
+import { EmailService } from 'src/email/email.service';
 @Controller()
 export class UserController {
     constructor(
         private readonly UserService: UserService,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        private readonly emailService: EmailService
         ) { }
     @Post('login')
     async login(@Body() body) {
@@ -74,4 +76,16 @@ export class UserController {
             data: rdata
         }
     }
+    // 忘记密码
+    @Get('forget')
+    async forget(@Query() params: Record<string, string>) {
+        const result = await this.emailService.sendEmailCode({
+            email: '321769601@qq.com',
+            sign: '系统邮件',
+            subject: '有效验证'
+        })
+        console.log(result, '>>>>>>>>');
+        return result
+    }
+
 }

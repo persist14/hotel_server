@@ -12,6 +12,7 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { JwtModule } from '@nestjs/jwt'
 import { JWTKEY } from 'src/logical/auth/constans';
+import { EmailService } from 'src/email/email.service';
 
 // jwt配置
 const JwtRegister: DynamicModule = JwtModule.register({
@@ -21,9 +22,9 @@ const JwtRegister: DynamicModule = JwtModule.register({
 })
 @Module({
   imports: [
-    JwtRegister
+    JwtRegister,
   ],
-  providers: [UserService],
+  providers: [UserService, EmailService],
   controllers: [UserController],
 })
 export class UserModule { }
