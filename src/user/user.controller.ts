@@ -14,12 +14,21 @@ import { JwtService } from '@nestjs/jwt'
 import { JWTKEY } from 'src/logical/auth/constans';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { EmailService } from 'src/email/email.service';
+import process from "process";
+import { ConfigService } from "@nestjs/config";
+
+interface EmailOpts {
+    email: string,
+    subject: string,
+    sign: string
+}
 @Controller()
 export class UserController {
     constructor(
         private readonly UserService: UserService,
         private readonly jwtService: JwtService,
-        private readonly emailService: EmailService
+        // private readonly emailService: EmailService,
+
         ) { }
     @Post('login')
     async login(@Body() body) {
@@ -29,7 +38,6 @@ export class UserController {
             const payload = { username: res.data.username, id: res.data._id }
             // 生成token
             const token = await this.jwtService.signAsync(payload, { expiresIn: '30d' })
-            console.log(await this.jwtService.verifyAsync(token, { secret: JWTKEY.secret }));
             
             rsdata = {
                 data: res.data,
@@ -77,15 +85,16 @@ export class UserController {
         }
     }
     // 忘记密码
-    @Get('forget')
-    async forget(@Query() params: Record<string, string>) {
-        const result = await this.emailService.sendEmailCode({
-            email: '321769601@qq.com',
-            sign: '系统邮件',
-            subject: '有效验证'
-        })
-        console.log(result, '>>>>>>>>');
-        return result
+    @Post('forget')
+    async forget(@Body() body: any) {
+        const data: EmailOpts  = {
+            ...body,
+            subject: '华商会',
+            sign: '华商会邮件通知'
+        }
+        const result = await this.UserService.forget(data)
+
+        return { ...result, data: '' }
     }
 
 }

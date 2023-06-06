@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { ISendMailOptions, MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
+const M = require('moment')
 
 @Injectable()
 export class EmailService {
@@ -14,7 +15,7 @@ export class EmailService {
     }) {
         try {
             const code = Math.random().toString(6).slice(-6)
-            const date = new Date()
+            const date = M().format('YYYY-MM-DD HH:mm:ss')
             const sendMailOpts: ISendMailOptions = {
                 to: data.email,
                 subject: data.subject || '用户邮箱验证',
@@ -32,7 +33,7 @@ export class EmailService {
             });
             return { code: 200, message: '发送成功' };
         }catch(ex) {
-            console.log('发送右键出错', ex);
+            console.log('发送出错', ex);
         }
     } 
 }

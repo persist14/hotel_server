@@ -18,4 +18,6 @@ export class User {
     email: string
     @Prop()
     phone: string
+    @Prop()
+    avatar: string
 }

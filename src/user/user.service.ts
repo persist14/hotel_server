@@ -10,12 +10,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { User } from '../../libs/db/src/schema/user';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { EmailService } from "../email/email.service";
 interface RgtOpts {
     username: string, password: string, email?: string, phone?: string
 }
 @Injectable()
 export class UserService {
-    constructor(@Inject(User.name) private readonly UserDB: ReturnModelType<typeof User>) { }
+    constructor(@Inject(User.name) private readonly UserDB: ReturnModelType<typeof User>,
+                @Inject('Email') private readonly emailService: EmailService) { }
     async login(username: string, password: string) {
         const findName = await this.UserDB.findOne({
             username
@@ -67,5 +69,11 @@ export class UserService {
     async profile(id): Promise<any> {
         const rdata = await this.UserDB.findOne({ _id: id })
         return rdata
+    }
+    async forget(data) {
+        // 调用发送邮箱验证方法
+        const result = await this.emailService.sendEmailCode(data)
+        // 邮件发送成功存入数据库到时候用来做对比
+        return result
     }
 }

@@ -13,6 +13,7 @@ import { UserController } from './user.controller';
 import { JwtModule } from '@nestjs/jwt'
 import { JWTKEY } from 'src/logical/auth/constans';
 import { EmailService } from 'src/email/email.service';
+import { ConfigModule } from "@nestjs/config";
 
 // jwt配置
 const JwtRegister: DynamicModule = JwtModule.register({
@@ -23,8 +24,13 @@ const JwtRegister: DynamicModule = JwtModule.register({
 @Module({
   imports: [
     JwtRegister,
+    ConfigModule
   ],
-  providers: [UserService, EmailService],
+  providers: [UserService, {
+    // 重命名注入名称
+    provide: 'Email',
+    useClass: EmailService
+  }],
   controllers: [UserController],
 })
 export class UserModule { }
