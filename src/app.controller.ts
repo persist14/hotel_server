@@ -1,14 +1,14 @@
 /* eslint-disable prettier/prettier */
 /*
- * @Description: 
- * @Author: 
+ * @Description:
+ * @Author:
  * @Date: 2023-05-26 15:00:09
  * @LastEditTime: 2023-06-02 14:03:17
  * @LastEditors: Please set LastEditors
- * @Reference: 
+ * @Reference:
  */
 
-import { Controller, Get, Inject } from '@nestjs/common';
+import {Controller, Get, Inject, UseInterceptors} from '@nestjs/common';
 import { AppService } from './app.service';
 import { ReturnModelType } from '@typegoose/typegoose'
 import { User } from '@app/db/schema/user';

@@ -18,4 +18,12 @@ export class Room {
   intro: string; // 房间介绍
   @Prop()
   img_arr: ['string']; // 房间图片
+  @Prop()
+  rate: object // 评分信息
+  @Prop()
+  living: boolean // 是否居住
+  @Prop()
+  liv_start_time: Schema.Types.Date // 居住开始时间
+  @Prop()
+  liv_end_time: Schema.Types.Date // 居住结束时间
 }
