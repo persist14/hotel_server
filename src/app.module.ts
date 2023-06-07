@@ -17,6 +17,11 @@ import { ConfigModule } from "@nestjs/config";
 import { HotelService } from './hotel/hotel.service';
 import { HotelController } from './hotel/hotel.controller';
 import { HotelModule } from './hotel/hotel.module';
+import { CommentService } from './comment/comment.service';
+import { CommentModule } from './comment/comment.module';
+import { UploadService } from './upload/upload.service';
+import { UploadController } from './upload/upload.controller';
+import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
     DbModule,
@@ -25,9 +30,11 @@ import { HotelModule } from './hotel/hotel.module';
     ConfigModule.forRoot({
       isGlobal: true
     }),
-    HotelModule
+    HotelModule,
+    CommentModule,
+    UploadModule
   ],
-  controllers: [AppController, HotelController],
-  providers: [AppService, HotelService],
+  controllers: [AppController, HotelController, UploadController],
+  providers: [AppService, HotelService, CommentService, UploadService],
 })
 export class AppModule { }

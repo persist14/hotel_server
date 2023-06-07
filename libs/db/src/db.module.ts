@@ -8,25 +8,28 @@
  * @Reference: 
  */
 
-import { Global, Module, Provider } from '@nestjs/common';
-import { mongoose, getModelForClass } from '@typegoose/typegoose'
-import { User } from './schema/user';
-import { Article } from './schema/article';
-import { Hotel } from './schema/hotel'
-import { Room } from './schema/rooms'
-import { Comment } from './schema/comment'
+import { Global, Module, Provider } from "@nestjs/common";
+import { getModelForClass, mongoose } from "@typegoose/typegoose";
+import { User } from "./schema/user";
+import { Article } from "./schema/article";
+import { Hotel } from "./schema/hotel";
+import { Room } from "./schema/rooms";
+import { Comment } from "./schema/comment";
+import { ReserveRms } from "@app/db/schema/reserveRms";
+import { LikeRms } from "@app/db/schema/likeRms";
+
 const createTime = {
   schemaOptions: {
-    timestamps:{
-      createdAt: 'created_at',
-      updatedAt: 'updated_at'
+    timestamps: {
+      createdAt: "created_at",
+      updatedAt: "updated_at"
     }
   }
-}
+};
 const providers: Provider[] = [
   {
-    provide: 'DB_CONNECTION',
-    useFactory: () => mongoose.connect('mongodb://127.0.0.1:27017/hotel')
+    provide: "DB_CONNECTION",
+    useFactory: () => mongoose.connect("mongodb://127.0.0.1:27017/hotel")
   },
   {
     provide: User.name,
@@ -48,10 +51,20 @@ const providers: Provider[] = [
     provide: Comment.name,
     useFactory: () => getModelForClass(Comment, createTime)
   },
-]
+  {
+    provide: ReserveRms.name,
+    useFactory: () => getModelForClass(ReserveRms, createTime)
+  },
+  {
+    provide: LikeRms.name,
+    useFactory: () => getModelForClass(LikeRms, createTime)
+  }
+];
+
 @Global()
 @Module({
   providers,
-  exports: providers,
+  exports: providers
 })
-export class DbModule { }
+export class DbModule {
+}
