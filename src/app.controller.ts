@@ -8,37 +8,30 @@
  * @Reference:
  */
 
-import {Controller, Get, Inject, UseInterceptors} from '@nestjs/common';
-import { AppService } from './app.service';
-import { ReturnModelType } from '@typegoose/typegoose'
-import { User } from '@app/db/schema/user';
-import { Article } from '@app/db/schema/article';
+import { Controller, Get, Inject, Query } from "@nestjs/common";
+import { HttpService } from "@nestjs/axios";
+import { AppService } from "./app.service";
+import { ReturnModelType } from "@typegoose/typegoose";
+import { User } from "@app/db/schema/user";
+import { Article } from "@app/db/schema/article";
+
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService,
-    @Inject(User.name) private readonly DB: ReturnModelType<typeof User>,
-    @Inject(Article.name) private readonly ArtDB: ReturnModelType<typeof Article>
-    ) { }
+              @Inject(User.name) private readonly DB: ReturnModelType<typeof User>,
+              @Inject(Article.name) private readonly ArtDB: ReturnModelType<typeof Article>,
+              private readonly httpService: HttpService
+  ) {
+  }
 
   @Get()
   getHello(): string {
     return this.appService.getHello();
   }
-  // @Get('user')
-  // async getUserInfo() {
-  //   const res = await this.DB.find()
-  //   return {
-  //     code: 200,
-  //     data: res
-  //   }
-  // }
-  // @Get('article')
-  // async getArticleInfo() {
-  //   const res = await this.ArtDB.find()
-  //   return {
-  //     code: 200,
-  //     data: res
-  //   }
-  // }
+
+  @Get("/trans")
+  async translatePos(@Query() query: Record<string, any>): Promise<any> {
+    return await this.appService.trans(query);
+  }
 }
