@@ -1,6 +1,7 @@
 // @ts-ignore
 
 import { Prop } from '@typegoose/typegoose';
+import { Types } from 'mongoose';
 
 export class Hotel {
   @Prop({ required: true })
@@ -17,4 +18,6 @@ export class Hotel {
   ave_price: number; // 均价
   @Prop()
   cover: string; // 封面
+  @Prop({ type: Types.Array })
+  photos: string;
 }

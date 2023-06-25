@@ -32,6 +32,7 @@ export class UserController {
   @Post("login")
   async login(@Body() body) {
     const res = await this.UserService.login(body.username, body.password);
+    console.log(res, ">>>>>>>>");
     let rsdata;
     if (res.data) {
       const payload = { username: res.data.username, id: res.data._id };
